@@ -2,8 +2,8 @@
 import './App.scss';
 import {Canvas, useFrame} from 'react-three-fiber'
 import { useRef , useState} from 'react';
-import {useSpring, a} from 'react-spring'
 import { OrbitControls } from '@react-three/drei';
+import Header from './components/Header.js'
 const BoxAnimated = ({meshPos, color, args}) => {
   const meshRef = useRef(null);
   const [expanded, setExpanded]= useState(false);
@@ -12,12 +12,14 @@ const BoxAnimated = ({meshPos, color, args}) => {
    setExpanded(!expanded);
 if(expanded){
   setScale([1.3,1.3,1.3]);
+  meshRef.current.rotation.x=0
 }
 else{
   setScale([1,1,1])
+ 
 }
  }
-  useFrame(()=>{meshRef.current.rotation.x=meshRef.current.rotation.y +=0.005})
+  useFrame(()=>{expanded?meshRef.current.rotation.x=meshRef.current.rotation.y +=0:meshRef.current.rotation.x=meshRef.current.rotation.y +=0.005})
   return (
  
             <mesh castShadow ref={meshRef}  onClick={handleClick} scale={scaling} position={meshPos}>
@@ -32,10 +34,11 @@ else{
 function App() {
   return (
     <>
+    <Header/>
     <Canvas
         colorManagement
         shadowMap
-        camera={{ position: [-5, 2, 10], fov: 60 }}>
+        camera={{ position: [-5, 2, 10], fov: 25 }}>
         {/* This light makes things look pretty */}
         <ambientLight intensity={0.3} />
         {/* Our main source of light, also casting our shadow */}
@@ -65,12 +68,12 @@ function App() {
           </mesh>
           <BoxAnimated
             meshPos={[0, 1, 0]}
-            color='lightblue'
+            color='gold'
             args={[3, 2, 1]}
             speed={2}
           />
-          <BoxAnimated meshPos={[-2, 1, -5]} color='pink' speed={6} />
-          <BoxAnimated meshPos={[5, 1, -2]} color='pink' speed={6} />
+          <BoxAnimated meshPos={[-2, 1, -5]} color='silver' speed={6} />
+          <BoxAnimated meshPos={[5, 1, -2]} color='silver' speed={6} />
         </group>
         {/* Allows us to move the canvas around for different prespectives */}
         <OrbitControls />
